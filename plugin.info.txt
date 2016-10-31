@@ -1,0 +1,7 @@
+base   kitty
+author Andreas Gohr
+email  andi@splitbrain.org
+date   2016-10-31
+name   kitty plugin
+desc   shows a kitten
+url    http://www.dokuwiki.org/plugin:kitty
