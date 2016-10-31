@@ -72,7 +72,7 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
 
         list($width, $height) = $data;
 
-        $renderer->doc .= '<img src="http://placekitten.com/'.$width.'/'.$height.'"">';
+        $renderer->doc .= '<img src="http://placekitten.com/'.$width.'/'.$height.'" title="'.$this->getLang('kitty').'">';
 
         return true;
     }

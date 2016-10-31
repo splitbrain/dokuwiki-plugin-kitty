@@ -9,7 +9,7 @@
 // $lang['menu'] = 'Your menu entry';
 
 // custom language strings for the plugin
-$lang['kitty'] = 'Kitty';
+$lang['kitty'] = 'Kätzchen';
 
 
 
