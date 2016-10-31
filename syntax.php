@@ -30,12 +30,24 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
     }
 
     /**
+     * @return helper_plugin_sqlite
+     */
+    static public function getDB() {
+        /** @var helper_plugin_sqlite $helper */
+        $helper = plugin_load('helper', 'sqlite');
+
+        $helper->init('kitty', __DIR__ . '/db/');
+
+        return $helper;
+    }
+
+    /**
      * Connect lookup pattern to lexer.
      *
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\{\{kitty \d+ \d+\}\}',$mode,'plugin_kitty');
+        $this->Lexer->addSpecialPattern('\{\{kitty .+?}\}',$mode,'plugin_kitty');
     }
 
 
@@ -49,11 +61,21 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
      * @return array Data for the renderer
      */
     public function handle($match, $state, $pos, Doku_Handler $handler){
-        $match = trim(substr($match, 7, -2));
-        list($width, $height) = explode(' ',  $match);
+        $name = trim(substr($match, 7, -2));
+        $sqlite = self::getDB();
 
-        $width = (int) $width;
-        $height = (int) $height;
+        $res = $sqlite->query('SELECT width, height FROM kitty WHERE name = ?', $name);
+        $result = $sqlite->res2row($res);
+        $sqlite->res_close($res);
+
+        if($result) {
+            $width = $result['width'];
+            $height = $result['height'];
+        } else {
+            $width = 100;
+            $height = 100;
+        }
+
 
 
         return array($width, $height);
