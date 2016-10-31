@@ -14,19 +14,19 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
      * @return string Syntax mode type
      */
     public function getType() {
-        return 'FIXME: container|baseonly|formatting|substition|protected|disabled|paragraphs';
+        return 'substition';
     }
     /**
      * @return string Paragraph type
      */
     public function getPType() {
-        return 'FIXME: normal|block|stack';
+        return 'block';
     }
     /**
      * @return int Sort order - Low numbers go before high numbers
      */
     public function getSort() {
-        return FIXME;
+        return 155;
     }
 
     /**
@@ -35,13 +35,9 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<FIXME>',$mode,'plugin_kitty');
-//        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_kitty');
+        $this->Lexer->addSpecialPattern('\{\{kitty \d+ \d+\}\}',$mode,'plugin_kitty');
     }
 
-//    public function postConnect() {
-//        $this->Lexer->addExitPattern('</FIXME>','plugin_kitty');
-//    }
 
     /**
      * Handle matches of the kitty syntax
@@ -53,9 +49,14 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
      * @return array Data for the renderer
      */
     public function handle($match, $state, $pos, Doku_Handler $handler){
-        $data = array();
+        $match = trim(substr($match, 7, -2));
+        list($width, $height) = explode(' ',  $match);
 
-        return $data;
+        $width = (int) $width;
+        $height = (int) $height;
+
+
+        return array($width, $height);
     }
 
     /**
@@ -68,6 +69,10 @@ class syntax_plugin_kitty extends DokuWiki_Syntax_Plugin {
      */
     public function render($mode, Doku_Renderer $renderer, $data) {
         if($mode != 'xhtml') return false;
+
+        list($width, $height) = $data;
+
+        $renderer->doc .= '<img src="http://placekitten.com/'.$width.'/'.$height.'"">';
 
         return true;
     }
