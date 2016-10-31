@@ -58,4 +58,16 @@ class general_plugin_kitty_test extends DokuWikiTest {
         }
 
     }
+
+    public function test_placekitten() {
+
+        $plugin  = new syntax_plugin_kitty();
+        $renderer = new Doku_Renderer_xhtml();
+
+        $plugin->render('xhtml', $renderer, array(200, 200));
+
+        $this->assertContains('placekitten.com', $renderer->doc);
+
+
+    }
 }
